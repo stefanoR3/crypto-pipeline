@@ -1,0 +1,21 @@
+# Python - fișiere de sistem și cache
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Database - nu urc date din Postgres pe Git
+pgdata/
+*.sql_dump
+*.log
+
+# IDEs - setări personale editor
+.vscode/
+.idea/
+*.swp
+
+# Environment variables -  cheile de API și parolele de DB
+.env
