@@ -1,24 +1,24 @@
+# for http requests ( server -> client). installed in venv
 import requests
+from api_utils import APImanager
 
-def get_crypto_price(coin):
-    #API -> 'f' for variables introduction
-    url = f"https://api.coingecko.com/api/v3/simple/price?ids={coin}&vs_currencies=usd"
+#for time stamp
+from datetime import datetime 
 
-    #get request to server
-    response = requests.get(url)
+#create object (Instance)
+manager = APImanager(currency = 'usd')
 
-    #state code 200 = connection successful
-    if response.status_code==200:
-        print("Connection successful! The api is responding")
-        data = response.json()
-        return data[coin]['usd']
-    else:
-        return None
+#strip = trim in java (to delate spaces)
+coin_name = input("Wich cryptocurrency do you want to ceck: ").lower().strip()
     
 #function test:
 
-price = get_crypto_price('bitcoin')
+price = manager.get_crypto_price(coin_name)
+
 if price:
-    print(f"current Bitcoin price: ${price}")
+    #capture current time
+    #strftime = string format time (to edit)
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"[{current_time}] {coin_name.capitalize()}: ${price:,}")
 else:
-    print("Eroare la preluarea datelor.")
+    print("error retrieving data!")
