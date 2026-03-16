@@ -23,35 +23,28 @@ class APImanager:
             #send request
             response = requests.get(self.base_url,params=params)
 
+            #auto catch code errors
+            response.raise_for_status()
+
             #state code 200 = connection successful
             #state code 404 = not found
             #state cade 500 = server error
 
-            if response.status_code==200:
-                data = response.json()
+            data = response.json()
 
-                #json -> from raw text to dictionary
-                #data is a dictionary of dictionary/s
-                #{bitcoin: {usd: {xxx}}} -> bitcoin is n element of a dictionary itself
+            #json -> from raw text to dictionary
+            #data is a dictionary of dictionary/s
+            #{bitcoin: {usd: {xxx}}} -> bitcoin is n element of a dictionary itself
 
-
-                try:
-                    return data
-                except KeyError:
-                    #error for missing value
-                    print(f"Error: The coin '{coin}' not found in API response!")
-                    return None
-            
-                    #general error
-                except Exception as e:
-                    print(f"Unexpected error occured:  '{e}'")
-                    return None
-                
+            return data[coin][self.currency]
+        
         except KeyError:
-            #error name spelled wrong
+            #error name spelled wrong coin or currency
             print(f"Key error: The coin '{coin}' was not found")
             return None
-        
+        except requests.exceptions.RequestException as e:
+            #network errors -> no internet/server down
+            print(f"Exception: {e}")
         except Exception as e:
             #general error
             print(f"Unexpected error occured")
