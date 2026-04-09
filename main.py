@@ -1,5 +1,4 @@
 # for http requests ( server -> client). installed in venv
-import requests
 from api_utils import APImanager
 
 #for time stamp

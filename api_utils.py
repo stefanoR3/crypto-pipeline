@@ -1,4 +1,6 @@
 import requests
+import os
+import json
 
 class APImanager:
 
@@ -34,7 +36,8 @@ class APImanager:
 
             #json -> from raw text to dictionary
             #data is a dictionary of dictionary/s
-            #{bitcoin: {usd: {xxx}}} -> bitcoin is n element of a dictionary itself
+            #{bitcoin: {usd: {xxx}, eur:{xxx}, ...}} -> 
+            #we could have used .text
 
             return data[coin][self.currency]
         
@@ -49,3 +52,27 @@ class APImanager:
             #general error
             print(f"Unexpected error occured")
             return None
+        
+    def saveToJson(data,fileName = "crypto_history.json"):
+        #file verification
+        if os.path.exist(fileName):
+            with open(fileName,"r") as file:
+                #old data load ; r = read
+                try:
+                    db = json.load(file)
+                except json.JSONDecodeError:
+                    db = [] 
+        else: 
+            db=[]
+
+        #add new line to file
+        db.append(data)
+
+        #save all back 
+        with open (fileName, "w") as file:
+            #w = write (deletes all previous data!)
+            json.dump(db, file, indent = 4)
+        
+
+        
+            
